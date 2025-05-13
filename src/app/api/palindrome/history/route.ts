@@ -25,3 +25,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json([], { status: 200 }); 
   }
 }
+
+
+export async function DELETE(req: NextRequest) {
+  try {
+    console.log('Deleting history');
+    await db.delete(palindromes);
+    return NextResponse.json({ message: 'History deleted successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting history:', error);
+    return NextResponse.json({ message: 'Failed to delete history' }, { status: 500 });
+  }
+}

@@ -27,6 +27,10 @@ class InMemoryDB {
     this.palindromes = [];
     this.nextId = 1;
   }
+
+  async deleteById(id: number): Promise<void> {
+    this.palindromes = this.palindromes.filter(p => p.id !== id);
+  }
 }
 
 
@@ -49,6 +53,8 @@ export const createInMemoryDBWrapper = (): InMemoryDBWrapper => {
       })
     }),
     delete: async (table: any) => inMemoryDB.delete()
+
+    
   };
 }; 
 

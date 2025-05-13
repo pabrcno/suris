@@ -1,12 +1,7 @@
 
+import { Palindrome } from '@/db/schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export type Palindrome = {
-  id: string;
-  text: string;
-  isPalindrome: boolean;
-  createdAt: string;
-};
 
 export const useCheckPalindrome = () => {
   const queryClient = useQueryClient();
@@ -37,3 +32,36 @@ export const usePalindromeHistory = (limit = 10) => {
     },
   });
 };
+
+export const useDeletePalindromeHistory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/palindrome/history', {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete history');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['palindromeHistory'] });
+    },
+  });
+};
+
+
+export const useDeletePalindrome = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => {
+      await fetch(`/api/palindrome/${id}`, {
+        method: 'DELETE',
+      });
+     
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['palindromeHistory'] });
+    },
+  });
+};
+
